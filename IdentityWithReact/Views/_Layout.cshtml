@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div>
+                <div>
+                    <ul>
+                        <li><a asp-action="Index" asp-controller="Home">Home</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div>
+        @RenderBody()
+    </div>
+    <footer>
+        &copy; - @DateTime.Now.Year - Micael Ståhl
+    </footer>
+</body>
+</html>

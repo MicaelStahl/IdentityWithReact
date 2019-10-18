@@ -9,6 +9,9 @@ using System.Text;
 
 namespace DataAccessLibrary.Database
 {
+    /// <summary>
+    /// The database used for this application.
+    /// </summary>
     public class ReactDbContext : ApiAuthorizationDbContext<AppUser>
     {
         public ReactDbContext(
@@ -17,5 +20,7 @@ namespace DataAccessLibrary.Database
             : base(options, operationalStoreOptions)
         {
         }
+
+        public DbSet<Person> People { get; set; }
     }
 }

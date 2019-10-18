@@ -1,0 +1,22 @@
+﻿@model ErrorViewModel
+
+@using DataAccessLibrary.ViewModels
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h1>Error</h1>
+<hr />
+
+<section>
+    <h2>Error ID: @Model.RequestId</h2>
+    <hr />
+    <div>
+        <h4><ins>Error message:</ins></h4>
+        <p>@Model.ErrorMessage</p>
+        <hr />
+        <h4><ins>Exception message:</ins></h4>
+        <p>@ViewBag.exceptionMessage</p>
+    </div>
+</section>
