@@ -9,9 +9,9 @@ using System.Text;
 
 namespace DataAccessLibrary.Database
 {
-    internal class IdentityDbContext : ApiAuthorizationDbContext<AppUser>
+    public class ReactDbContext : ApiAuthorizationDbContext<AppUser>
     {
-        public IdentityDbContext(
+        public ReactDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions)
             : base(options, operationalStoreOptions)
