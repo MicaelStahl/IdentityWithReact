@@ -5,6 +5,9 @@ using System.Text;
 
 namespace DataAccessLibrary.Models
 {
+    /// <summary>
+    /// Regular person used for this application.
+    /// </summary>
     public class Person
     {
         [Key]
@@ -25,10 +28,6 @@ namespace DataAccessLibrary.Models
         public int Age { get; set; }
 
         [Required]
-        [StringLength(60, MinimumLength = 2, ErrorMessage = "The character-length of the city cannot exceed 60 characters, nor be less than 2.")]
-        public string City { get => City; set => City.ToUpper(); } // This, in theory, will always make City be uppercase.
-
-        [Required]
         [EmailAddress]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
@@ -39,5 +38,14 @@ namespace DataAccessLibrary.Models
         //[RegularExpression("^[0-9]+$", ErrorMessage = "Only numbers allowed.")] // Unsure if needed.
         [StringLength(12, MinimumLength = 4, ErrorMessage = "The length of the phonenumber has to be between 4 to 12 numbers.")]
         public string PhoneNumber { get; set; }
+
+        [Required]
+        [StringLength(60, MinimumLength = 2, ErrorMessage = "The character-length of the city cannot exceed 60 characters, nor be less than 2.")]
+        public string City { get; set; }
+
+        [Required]
+        [Display(Name = "Postal code")]
+        [StringLength(12, MinimumLength = 4, ErrorMessage = "The postal code cannot exceed 12 characters, nor be less than 4.")]
+        public string PostalCode { get; set; }
     }
 }

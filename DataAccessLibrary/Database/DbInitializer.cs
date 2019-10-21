@@ -103,17 +103,17 @@ namespace DataAccessLibrary.Database
                 // Adds a large amount of models to test around with.
                 var people = new Person[]
                 {
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson1", Age = 23, City = "TESTTOWN", Email = "Test.Testsson1@context.com", PhoneNumber = "123456789" },
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson2", Age = 53, City = "TOWN", Email = "Test.Testsson2@context.com", PhoneNumber = "123456789" },
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson3", Age = 21, City = "TEST", Email = "Test.Testsson3@context.com", PhoneNumber = "123456789" },
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson4", Age = 57, City = "DOWNTOWN", Email = "Test.Testsson4@context.com", PhoneNumber = "123456789" },
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson5", Age = 11, City = "UPTOWN", Email = "Test.Testsson5@context.com", PhoneNumber = "123456789" },
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson6", Age = 103, City = "RIGHTTOWN", Email = "Test.Testsson6@context.com", PhoneNumber = "123456789" },
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson7", Age = 7, City = "LEFTTOWN", Email = "Test.Testsson7@context.com", PhoneNumber = "123456789" },
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson8", Age = 12, City = "NORTHTOWN", Email = "Test.Testsson8@context.com", PhoneNumber = "123456789" },
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson9", Age = 65, City = "SOUTHTOWN", Email = "Test.Testsson9@context.com", PhoneNumber = "123456789" },
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson10", Age = 45, City = "WESTTOWN", Email = "Test.Testsson10@context.com", PhoneNumber = "123456789" },
-                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson11", Age = 32, City = "EASTTOWN", Email = "Test.Testsson11@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson1", Age = 23, City = "TESTTOWN", PostalCode = "12345", Email = "Test.Testsson1@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson2", Age = 53, City = "TOWN", PostalCode = "12345", Email = "Test.Testsson2@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson3", Age = 21, City = "TEST", PostalCode = "12345", Email = "Test.Testsson3@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson4", Age = 57, City = "DOWNTOWN", PostalCode = "12345", Email = "Test.Testsson4@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson5", Age = 11, City = "UPTOWN", PostalCode = "12345", Email = "Test.Testsson5@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson6", Age = 103, City = "RIGHTTOWN", PostalCode = "12345", Email = "Test.Testsson6@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson7", Age = 7, City = "LEFTTOWN", PostalCode = "12345", Email = "Test.Testsson7@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson8", Age = 12, City = "NORTHTOWN", PostalCode = "12345", Email = "Test.Testsson8@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson9", Age = 65, City = "SOUTHTOWN", PostalCode = "12345", Email = "Test.Testsson9@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson10", Age = 45, City = "WESTTOWN", PostalCode = "12345", Email = "Test.Testsson10@context.com", PhoneNumber = "123456789" },
+                    new Person { Id = Guid.NewGuid(), FirstName = "Test", LastName = "Testsson11", Age = 32, City = "EASTTOWN", PostalCode = "12345", Email = "Test.Testsson11@context.com", PhoneNumber = "123456789" },
                 };
 
                 // Adds them all to database.
