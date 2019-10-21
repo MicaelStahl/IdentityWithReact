@@ -17,12 +17,10 @@ namespace BusinessLibrary.Repositories
     {
         #region D.I
 
-        private readonly ILogger<PersonRepository> _logger;
         private readonly ReactDbContext _db;
 
-        public PersonRepository(ILogger<PersonRepository> logger, ReactDbContext db)
+        public PersonRepository(ReactDbContext db)
         {
-            _logger = logger;
             _db = db;
         }
 
@@ -34,34 +32,38 @@ namespace BusinessLibrary.Repositories
         {
             try
             {
+                // Create authorization with token generation later.
+
                 if (string.IsNullOrWhiteSpace(person.FirstName) || string.IsNullOrWhiteSpace(person.LastName) ||
                     string.IsNullOrWhiteSpace(person.Email) || string.IsNullOrWhiteSpace(person.PhoneNumber) ||
                     string.IsNullOrWhiteSpace(person.City) || string.IsNullOrWhiteSpace(person.PostalCode) ||
                     person.Age > 110 || person.Age < 5)
                 {
-                    _logger.LogError($"Person {person} contained one or more invalid fields.",
-                        new string[] {
-                            person.FirstName,
-                            person.LastName,
-                            person.Email,
-                            person.PhoneNumber,
-                            person.City,
-                            person.PostalCode,
-                            person.Age.ToString()
-                        });
-
                     throw new Exception("Unexpected error occurred: One or more fields were invalid.");
                 }
 
-                await _db.People.AddAsync(person);
+                // Gets the entity being created (with a new ID)
+                var createdEntity = await _db.People.AddAsync(
+                    new Person
+                    {
+                        Id = Guid.NewGuid(),
+                        FirstName = person.FirstName,
+                        LastName = person.LastName,
+                        Age = person.Age,
+                        City = person.City,
+                        Email = person.Email,
+                        PhoneNumber = person.PhoneNumber,
+                        PostalCode = person.PostalCode
+                    });
 
-                _logger.LogInformation($"Person {person} was successfully created.");
+                await _db.SaveChangesAsync();
 
-                return Task.FromResult(person);
+                // Returns a task with the created entity.
+                return Task.FromResult(createdEntity.Entity);
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex.InnerException;
             }
         }
 
@@ -71,12 +73,45 @@ namespace BusinessLibrary.Repositories
 
         public async Task<Person> Find(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    throw new NullReferenceException("Unexpected error occured: ID was blank.");
+                }
+
+                var person = await _db.People.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (person == null)
+                {
+                    throw new NullReferenceException($"Unexpected error occurred: No person exists with ID: {id}.");
+                }
+
+                return await Task.FromResult(person);
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         public async Task<PersonList> FindAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var people = await _db.People.ToListAsync();
+
+                if (people == null || people.Count == 0)
+                {
+                    throw new NullReferenceException("Unexpected error: No people were found.");
+                }
+
+                return new PersonList { People = people };
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         #endregion Find
@@ -85,16 +120,71 @@ namespace BusinessLibrary.Repositories
 
         public async Task<Person> Edit(Person person)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(person.FirstName) || string.IsNullOrWhiteSpace(person.LastName) ||
+        string.IsNullOrWhiteSpace(person.Email) || string.IsNullOrWhiteSpace(person.PhoneNumber) ||
+        string.IsNullOrWhiteSpace(person.City) || string.IsNullOrWhiteSpace(person.PostalCode) ||
+        person.Age > 110 || person.Age < 5)
+                {
+                    throw new Exception("Unexpected error occurred: One or more fields were invalid.");
+                }
+
+                var original = await _db.People.FirstOrDefaultAsync(x => x.Id == person.Id);
+
+                if (original == null)
+                {
+                    throw new NullReferenceException($"Unexpected error occurred: No person was found with ID: {person.Id}");
+                }
+
+                original.FirstName = person.FirstName;
+                original.LastName = person.LastName;
+                original.Age = person.Age;
+                original.Email = person.Email;
+                original.PhoneNumber = person.PhoneNumber;
+                original.City = person.City.ToUpper();
+                original.PostalCode = person.PostalCode;
+
+                await _db.SaveChangesAsync();
+
+                return original;
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         #endregion Edit
 
         #region Delete
 
-        public async Task Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    throw new NullReferenceException("Unexpected error: ID was blank.");
+                }
+
+                var person = await _db.People.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (person == null)
+                {
+                    throw new NullReferenceException($"Unexpected error occurred: No person with ID: {id} was found.");
+                }
+
+                var entityState = _db.People.Remove(person);
+
+                await _db.SaveChangesAsync();
+
+                return await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         #endregion Delete

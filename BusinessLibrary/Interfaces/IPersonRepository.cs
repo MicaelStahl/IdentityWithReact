@@ -20,6 +20,6 @@ namespace BusinessLibrary.Interfaces
 
         Task<Person> Edit(Person person);
 
-        Task Delete(Guid id);
+        Task<bool> Delete(Guid id);
     }
 }
