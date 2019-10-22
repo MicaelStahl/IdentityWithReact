@@ -12,14 +12,14 @@ namespace BusinessLibrary.Interfaces
     /// </summary>
     public interface IPersonRepository
     {
-        Task<Task> Create(Person person);
+        Task<PersonWithMessage> Create(Person person);
 
-        Task<Person> Find(Guid id);
+        Task<PersonWithMessage> Find(Guid id);
 
-        Task<PersonList> FindAll();
+        Task<PersonListWithMessage> FindAll();
 
-        Task<Person> Edit(Person person);
+        Task<PersonWithMessage> Edit(Person person);
 
-        Task<bool> Delete(Guid id);
+        Task<string> Delete(Guid id);
     }
 }

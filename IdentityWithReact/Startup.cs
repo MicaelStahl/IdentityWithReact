@@ -1,5 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
+using BusinessLibrary.Interfaces;
+using BusinessLibrary.Repositories;
 using DataAccessLibrary.Database;
 using DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -30,6 +32,8 @@ namespace IdentityWithReact
         {
             services.AddDbContext<ReactDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<IPersonRepository, PersonRepository>();
 
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
@@ -116,7 +120,7 @@ namespace IdentityWithReact
 
             app.UseRouting();
 
-            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseIdentityServer();
             app.UseAuthentication();
             app.UseEndpoints(endpoints =>

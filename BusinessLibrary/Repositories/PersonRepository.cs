@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLibrary.Repositories
 {
-    internal class PersonRepository : IPersonRepository
+    public class PersonRepository : IPersonRepository
     {
         #region D.I
 
@@ -28,7 +28,7 @@ namespace BusinessLibrary.Repositories
 
         #region Create
 
-        public async Task<Task> Create(Person person)
+        public async Task<PersonWithMessage> Create(Person person)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace BusinessLibrary.Repositories
                     string.IsNullOrWhiteSpace(person.City) || string.IsNullOrWhiteSpace(person.PostalCode) ||
                     person.Age > 110 || person.Age < 5)
                 {
-                    throw new Exception("Unexpected error occurred: One or more fields were invalid.");
+                    return new PersonWithMessage { Message = StatusMessages.InvalidFields };
                 }
 
                 // Gets the entity being created (with a new ID)
@@ -58,12 +58,12 @@ namespace BusinessLibrary.Repositories
 
                 await _db.SaveChangesAsync();
 
-                // Returns a task with the created entity.
-                return Task.FromResult(createdEntity.Entity);
+                // Returns the created entity
+                return new PersonWithMessage { Person = createdEntity.Entity, Message = new ActionMessages("person").Created };
             }
             catch (Exception ex)
             {
-                throw ex.InnerException;
+                throw new NullReferenceException(ex.Message, ex.InnerException);
             }
         }
 
@@ -71,31 +71,31 @@ namespace BusinessLibrary.Repositories
 
         #region Find
 
-        public async Task<Person> Find(Guid id)
+        public async Task<PersonWithMessage> Find(Guid id)
         {
             try
             {
                 if (id == Guid.Empty)
                 {
-                    throw new NullReferenceException("Unexpected error occured: ID was blank.");
+                    return new PersonWithMessage { Message = StatusMessages.EmptyId };
                 }
 
                 var person = await _db.People.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (person == null)
                 {
-                    throw new NullReferenceException($"Unexpected error occurred: No person exists with ID: {id}.");
+                    return new PersonWithMessage { Message = new StatusMessages(id).NotFound };
                 }
 
-                return await Task.FromResult(person);
+                return new PersonWithMessage { Person = person, Message = new ActionMessages("person").Found };
             }
             catch (Exception ex)
             {
-                throw ex.InnerException;
+                throw new NullReferenceException(ex.Message, ex.InnerException);
             }
         }
 
-        public async Task<PersonList> FindAll()
+        public async Task<PersonListWithMessage> FindAll()
         {
             try
             {
@@ -103,14 +103,14 @@ namespace BusinessLibrary.Repositories
 
                 if (people == null || people.Count == 0)
                 {
-                    throw new NullReferenceException("Unexpected error: No people were found.");
+                    return new PersonListWithMessage { Message = StatusMessages.EmptyList };
                 }
 
-                return new PersonList { People = people };
+                return new PersonListWithMessage { People = people, Message = new ActionMessages("person").Found };
             }
             catch (Exception ex)
             {
-                throw ex.InnerException;
+                throw new NullReferenceException(ex.Message, ex.InnerException);
             }
         }
 
@@ -118,23 +118,23 @@ namespace BusinessLibrary.Repositories
 
         #region Edit
 
-        public async Task<Person> Edit(Person person)
+        public async Task<PersonWithMessage> Edit(Person person)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(person.FirstName) || string.IsNullOrWhiteSpace(person.LastName) ||
-        string.IsNullOrWhiteSpace(person.Email) || string.IsNullOrWhiteSpace(person.PhoneNumber) ||
-        string.IsNullOrWhiteSpace(person.City) || string.IsNullOrWhiteSpace(person.PostalCode) ||
-        person.Age > 110 || person.Age < 5)
+                    string.IsNullOrWhiteSpace(person.Email) || string.IsNullOrWhiteSpace(person.PhoneNumber) ||
+                    string.IsNullOrWhiteSpace(person.City) || string.IsNullOrWhiteSpace(person.PostalCode) ||
+                    person.Age > 110 || person.Age < 5)
                 {
-                    throw new Exception("Unexpected error occurred: One or more fields were invalid.");
+                    return new PersonWithMessage { Message = StatusMessages.InvalidFields };
                 }
 
                 var original = await _db.People.FirstOrDefaultAsync(x => x.Id == person.Id);
 
                 if (original == null)
                 {
-                    throw new NullReferenceException($"Unexpected error occurred: No person was found with ID: {person.Id}");
+                    return new PersonWithMessage { Message = new StatusMessages(person.Id).NotFound };
                 }
 
                 original.FirstName = person.FirstName;
@@ -147,11 +147,11 @@ namespace BusinessLibrary.Repositories
 
                 await _db.SaveChangesAsync();
 
-                return original;
+                return new PersonWithMessage { Person = original, Message = new ActionMessages("person").Updated };
             }
             catch (Exception ex)
             {
-                throw ex.InnerException;
+                throw new NullReferenceException(ex.Message, ex.InnerException);
             }
         }
 
@@ -159,31 +159,31 @@ namespace BusinessLibrary.Repositories
 
         #region Delete
 
-        public async Task<bool> Delete(Guid id)
+        public async Task<string> Delete(Guid id)
         {
             try
             {
                 if (id == Guid.Empty)
                 {
-                    throw new NullReferenceException("Unexpected error: ID was blank.");
+                    return StatusMessages.EmptyId;
                 }
 
                 var person = await _db.People.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (person == null)
                 {
-                    throw new NullReferenceException($"Unexpected error occurred: No person with ID: {id} was found.");
+                    return new StatusMessages(id).NotFound;
                 }
 
-                var entityState = _db.People.Remove(person);
+                _db.People.Remove(person);
 
                 await _db.SaveChangesAsync();
 
-                return await Task.FromResult(true);
+                return new ActionMessages("person").Deleted;
             }
             catch (Exception ex)
             {
-                throw ex.InnerException;
+                throw new NullReferenceException(ex.Message, ex.InnerException);
             }
         }
 
