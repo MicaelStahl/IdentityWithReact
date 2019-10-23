@@ -46,7 +46,7 @@ namespace IdentityWithReact.Controllers
 
                 var result = await _service.Create(person);
 
-                if (result.Message == new ActionMessages("person").Created)
+                if (result.Message == ActionMessages.Created)
                 {
                     return Ok(result.Person);
                 }
@@ -87,7 +87,7 @@ namespace IdentityWithReact.Controllers
 
                 var result = await _service.Find(id);
 
-                if (result.Message == new ActionMessages("person").Found)
+                if (result.Message == ActionMessages.Found)
                 {
                     _logger.LogInformation("Person {Person} was successfully found with {id}");
 
@@ -97,13 +97,13 @@ namespace IdentityWithReact.Controllers
                 {
                     throw new Exception(StatusMessages.EmptyId);
                 }
-                else if (result.Message == new StatusMessages(id).NotFound)
+                else if (result.Message == StatusMessages.NotFound)
                 {
-                    _logger.LogWarning(new StatusMessages(id).NotFound, id);
+                    _logger.LogWarning(StatusMessages.NotFound, id);
 
-                    ModelState.AddModelError(string.Empty, new StatusMessages(id).NotFound);
+                    ModelState.AddModelError(string.Empty, StatusMessages.NotFound);
 
-                    return NotFound(new StatusMessages(id).NotFound);
+                    return NotFound(StatusMessages.NotFound);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace IdentityWithReact.Controllers
 
             var result = await _service.FindAll();
 
-            if (result.Message == new ActionMessages("person").Found)
+            if (result.Message == ActionMessages.Found)
             {
                 _logger.LogInformation("People {List<Person>} was successfully found.");
 
@@ -169,13 +169,13 @@ namespace IdentityWithReact.Controllers
 
                 var result = await _service.Edit(person);
 
-                if (result.Message == new ActionMessages("person").Updated)
+                if (result.Message == ActionMessages.Updated)
                 {
                     _logger.LogInformation("Person {Person} was successfully updated");
 
                     return Ok(result.Person);
                 }
-                else if (result.Message == new StatusMessages(person.Id).NotFound)
+                else if (result.Message == StatusMessages.NotFound)
                 {
                     _logger.LogWarning("Person {Person} could not be found with ID {person.Id}");
 
@@ -216,11 +216,11 @@ namespace IdentityWithReact.Controllers
 
                 var result = await _service.Delete(id);
 
-                if (result == new ActionMessages("person").Deleted)
+                if (result == ActionMessages.Deleted)
                 {
                     return Ok(result);
                 }
-                else if (result == new StatusMessages(id).NotFound)
+                else if (result == StatusMessages.NotFound)
                 {
                     _logger.LogWarning("Person {Person} was not deleted: ID {id} did not match any people");
 

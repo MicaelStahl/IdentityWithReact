@@ -11,6 +11,8 @@ namespace DataAccessLibrary.Database
 {
     /// <summary>
     /// The database used for this application.
+    /// <para></para>
+    /// Inherits <see cref="ApiAuthorizationDbContext{AppUser}"/> for SPA.
     /// </summary>
     public class ReactDbContext : ApiAuthorizationDbContext<AppUser>
     {

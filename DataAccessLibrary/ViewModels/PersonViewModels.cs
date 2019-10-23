@@ -13,7 +13,7 @@ namespace DataAccessLibrary.ViewModels
         public List<Person> People { get; set; } = new List<Person>();
 
         /// <summary>
-        /// Used in correlation with StatusMessages
+        /// Used in correlation with <see cref="StatusMessages"/> and/or <see cref="ActionMessages"/>.
         /// </summary>
         public string Message { get; set; }
     }
@@ -26,7 +26,7 @@ namespace DataAccessLibrary.ViewModels
         public Person Person { get; set; }
 
         /// <summary>
-        /// Used in correlation with StatusMessages
+        /// Used in correlation with <see cref="StatusMessages"/> and/or <see cref="ActionMessages"/>.
         /// </summary>
         public string Message { get; set; }
     }

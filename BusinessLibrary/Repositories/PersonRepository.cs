@@ -59,7 +59,7 @@ namespace BusinessLibrary.Repositories
                 await _db.SaveChangesAsync();
 
                 // Returns the created entity
-                return new PersonWithMessage { Person = createdEntity.Entity, Message = new ActionMessages("person").Created };
+                return new PersonWithMessage { Person = createdEntity.Entity, Message = ActionMessages.Created };
             }
             catch (Exception ex)
             {
@@ -84,10 +84,10 @@ namespace BusinessLibrary.Repositories
 
                 if (person == null)
                 {
-                    return new PersonWithMessage { Message = new StatusMessages(id).NotFound };
+                    return new PersonWithMessage { Message = StatusMessages.NotFound };
                 }
 
-                return new PersonWithMessage { Person = person, Message = new ActionMessages("person").Found };
+                return new PersonWithMessage { Person = person, Message = ActionMessages.Found };
             }
             catch (Exception ex)
             {
@@ -106,7 +106,7 @@ namespace BusinessLibrary.Repositories
                     return new PersonListWithMessage { Message = StatusMessages.EmptyList };
                 }
 
-                return new PersonListWithMessage { People = people, Message = new ActionMessages("person").Found };
+                return new PersonListWithMessage { People = people, Message = ActionMessages.Found };
             }
             catch (Exception ex)
             {
@@ -134,7 +134,7 @@ namespace BusinessLibrary.Repositories
 
                 if (original == null)
                 {
-                    return new PersonWithMessage { Message = new StatusMessages(person.Id).NotFound };
+                    return new PersonWithMessage { Message = StatusMessages.NotFound };
                 }
 
                 original.FirstName = person.FirstName;
@@ -147,7 +147,7 @@ namespace BusinessLibrary.Repositories
 
                 await _db.SaveChangesAsync();
 
-                return new PersonWithMessage { Person = original, Message = new ActionMessages("person").Updated };
+                return new PersonWithMessage { Person = original, Message = ActionMessages.Updated };
             }
             catch (Exception ex)
             {
@@ -172,14 +172,14 @@ namespace BusinessLibrary.Repositories
 
                 if (person == null)
                 {
-                    return new StatusMessages(id).NotFound;
+                    return StatusMessages.NotFound;
                 }
 
                 _db.People.Remove(person);
 
                 await _db.SaveChangesAsync();
 
-                return new ActionMessages("person").Deleted;
+                return ActionMessages.Deleted;
             }
             catch (Exception ex)
             {

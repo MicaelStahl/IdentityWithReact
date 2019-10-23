@@ -9,13 +9,6 @@ namespace DataAccessLibrary.ViewModels
     /// </summary>
     public class StatusMessages
     {
-        private static Guid Id { get; set; }
-
-        public StatusMessages(Guid id)
-        {
-            Id = id;
-        }
-
         /// <summary>
         /// Used when a wanted ID was blank.
         /// <code>Ex: (id == Guid.Empty)</code>
@@ -39,7 +32,7 @@ namespace DataAccessLibrary.ViewModels
         /// Used when a requested object wasn't found.
         /// <code>Ex: (Person person = await _db.People.FirstOrDefault(x=>x.Id == id) == null)</code>
         /// </summary>
-        public readonly string NotFound = $"Unexpected error: No object with ID: {Id} was found.";
+        public const string NotFound = "Unexpected error: No object with given ID was found.";
     }
 
     /// <summary>
@@ -47,31 +40,24 @@ namespace DataAccessLibrary.ViewModels
     /// </summary>
     public class ActionMessages
     {
-        private static string Str { get; set; }
-
-        public ActionMessages(string str)
-        {
-            Str = str;
-        }
-
         /// <summary>
         /// Used when a requested object has been successfully created.
         /// </summary>
-        public readonly string Created = $"The {Str} was successfully created.";
+        public const string Created = "The object was successfully created.";
 
         /// <summary>
         /// Used when a requested object has been successfully updated.
         /// </summary>
-        public readonly string Updated = $"The {Str} was successfully updated.";
+        public const string Updated = "The object was successfully updated.";
 
         /// <summary>
         /// Used when a requested object has been successfully deleted.
         /// </summary>
-        public readonly string Deleted = $"The {Str} was successfully deleted.";
+        public const string Deleted = "The object was successfully deleted.";
 
         /// <summary>
         /// Used when a requested object has been successfully found.
         /// </summary>
-        public readonly string Found = $"The {Str} was successfully found.";
+        public const string Found = "The object was successfully found.";
     }
 }
