@@ -120,7 +120,7 @@ namespace IdentityWithReact.Controllers
             }
         }
 
-        [HttpPost("find-all")]
+        [HttpGet("find-all")]
         public async Task<IActionResult> GetAllAsync()
         {
             _logger.LogInformation("Find all People {List<Person>}");

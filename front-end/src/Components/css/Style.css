@@ -1,0 +1,157 @@
+/* body {
+  background-color: gray;
+  color: black;
+} */
+
+.activePage {
+  text-decoration-color: red;
+  margin: 0 10px;
+  border: solid black 1px;
+}
+
+.break-me {
+  margin: 0 10px;
+}
+
+.pagination {
+  margin: 0 10px;
+}
+
+#react-paginate ul {
+  display: inline-block;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+#react-paginate li {
+  display: inline-block;
+}
+
+.DropdownList:hover {
+  cursor: pointer;
+}
+
+.innerContainer {
+  background-color: lightgray;
+  /* These borders are barely visible on screen, but they create a more "lively" feel to the website */
+  border-right: 1px solid #e5e5e5;
+  border-left: 1px solid #e5e5e5;
+  /* 
+            These are here to give the site a standard height-value, which will in return create a better feel
+            considering the "data" container's height wont change for every single view you visit.
+            It will only change if the height required is higher than the min-height given.
+        */
+  min-height: 600px;
+  margin-bottom: 80px;
+}
+
+#SignIn,
+#SignOut {
+  clear: both;
+  float: right;
+}
+
+.border-radius5 {
+  border-radius: 5px;
+}
+
+.paddingLR15 {
+  padding: 0 15px 0 15px;
+}
+
+#funny-llama {
+  height: 40px;
+  width: 60px;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.successMessage {
+  color: green;
+}
+
+.successMsgGray {
+  color: lightgray;
+}
+
+#main-nav {
+  margin: 0 0 50px 0;
+}
+
+.main-tr {
+  margin: 0;
+}
+
+.clearFloats {
+  clear: both;
+}
+
+.floatLeft {
+  clear: both;
+  float: left;
+}
+
+.floatRight {
+  clear: both;
+  float: right;
+}
+
+.marginLeft30 {
+  margin-left: 30px;
+}
+
+.resetRow {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.marginBottom5 {
+  margin-bottom: 5px;
+}
+
+.marginBottom30 {
+  margin-bottom: 30px;
+}
+
+.marginBottom60 {
+  margin-bottom: 60px;
+}
+
+.marginZero {
+  margin: 0;
+}
+
+#Equality {
+  margin-bottom: -10px;
+}
+
+.AlignCenter {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td {
+  padding: 2px;
+}
+
+.footer {
+  /*color: black;*/
+  bottom: 0;
+  white-space: nowrap;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+.footer {
+  max-height: 30px;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  height: 50px;
+  line-height: 50px;
+  position: static;
+  margin: 20px 0;
+}

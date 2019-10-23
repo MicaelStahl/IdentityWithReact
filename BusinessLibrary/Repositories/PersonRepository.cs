@@ -50,7 +50,7 @@ namespace BusinessLibrary.Repositories
                         FirstName = person.FirstName,
                         LastName = person.LastName,
                         Age = person.Age,
-                        City = person.City,
+                        City = person.City.ToUpper(),
                         Email = person.Email,
                         PhoneNumber = person.PhoneNumber,
                         PostalCode = person.PostalCode
