@@ -9,7 +9,7 @@ const Title = props => {
   const { Title, isLoading } = props;
   return (
     <React.Fragment>
-      <h1 className="text-left container">
+      <h1 className="text-left">
         {isLoading === true ? (
           <i className="fa fa-spinner fa-spin mr-1" />
         ) : null}

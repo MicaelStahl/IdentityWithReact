@@ -20,11 +20,17 @@ class Person extends Component {
     if (this.props.isLoading) {
       return <Loading />;
     } else {
-      console.log(this.props.people);
       return (
         <React.Fragment>
           <Title Title="List of all people" />
-          <GoBackButton />
+          <div>
+            <GoBackButton />
+            <Link
+              className="btn btn-primary btn-sm float-right"
+              to="/person/create-new-person">
+              Create new person
+            </Link>
+          </div>
           <div>
             <table className="table">
               <caption>List of all people</caption>
@@ -51,14 +57,26 @@ class Person extends Component {
                     <td>{person.city}</td>
                     <td>{person.postalCode}</td>
                     <td>
-                      <Link to={"/person/edit/:" + person.id}>
-                        <i className="fa fa-pencil-square-o" />
+                      <Link
+                        onClick={() =>
+                          this.props.onLinkClick(person.id, this.props.people)
+                        }
+                        to={"/person/edit/:" + person.id}>
+                        <i className="fa fa-pen-square" />
                       </Link>
-                      <Link to={"/person/details/:" + person.id}>
-                        <i className="fa fa-info-circle" />
+                      <Link
+                        onClick={() =>
+                          this.props.onLinkClick(person.id, this.props.people)
+                        }
+                        to={"/person/details/:" + person.id}>
+                        <i className="fa fa-info-circle ml-1" />
                       </Link>
-                      <Link to={"/person/delete/:" + person.id}>
-                        <i className="fa fa-window-close-o" />
+                      <Link
+                        onClick={() =>
+                          this.props.onLinkClick(person.id, this.props.people)
+                        }
+                        to={"/person/delete/:" + person.id}>
+                        <i className="fa fa-window-close ml-1" />
                       </Link>
                     </td>
                   </tr>
@@ -81,7 +99,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSiteLoad: () => dispatch(options.FindAllAsync())
+    onSiteLoad: () => dispatch(options.FindAllAsync()),
+    onLinkClick: (id, people) => dispatch(options.FindPersonAsync(id, people))
   };
 };
 

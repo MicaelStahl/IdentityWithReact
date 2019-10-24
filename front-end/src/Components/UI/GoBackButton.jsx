@@ -10,7 +10,7 @@ const GoBack = props => {
   return (
     <button
       onClick={() => onClick(props)}
-      className={`btn btn-primary btn-sm mt-2 ${
+      className={`btn btn-primary btn-sm mb-3 ${
         float === true ? "float-left" : null
       }`}>
       Return
@@ -20,7 +20,7 @@ const GoBack = props => {
 
 const onClick = props => {
   props.history.goBack();
-  props.onBtnClick();
+  // props.onBtnClick();
 };
 
 export default withRouter(GoBack);

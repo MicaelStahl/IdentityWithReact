@@ -2,7 +2,8 @@ import * as personOptions from "../actions/personActions";
 
 const initialState = {
   person: [],
-  people: []
+  people: [],
+  errorMessage: ""
 };
 
 const reducer = (state = initialState, action) => {
@@ -20,6 +21,35 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         people: action.people
+      };
+
+    case personOptions.FIND_PERSON:
+      return {
+        ...state,
+        person: action.person
+      };
+
+    case personOptions.EDIT_PERSON:
+      const index = state.people.findIndex(x => x.id === action.person.id);
+
+      if (index === -1) {
+        return {
+          ...state,
+          errorMessage: "Something went wrong."
+        };
+      }
+      const peopleList = state.people.concat();
+
+      return {
+        ...state,
+        person: action.person,
+        people: peopleList.splice(index, 1, action.person)
+      };
+
+    case personOptions.DELETE_PERSON:
+      return {
+        ...state,
+        people: state.people.filter(x => x.id !== action.id)
       };
 
     default:

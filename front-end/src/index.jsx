@@ -7,7 +7,7 @@ import configureStore, { history } from "./configureStore";
 import App from "./App";
 
 import "bootstrap";
-import "../node_modules/bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/css/bootstrap.css";
 
 import * as serviceWorker from "./serviceWorker";
 

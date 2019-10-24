@@ -50,15 +50,38 @@ export const CreatePersonAsync = person => {
 
 //#region FindOne
 
-const FindPerson = person => {
+/**
+ * Function used for saving one person to the redux store.
+ * @param {person} person The person to save to the redux store
+ */
+export const FindPerson = person => {
   return {
     type: FIND_PERSON,
     person
   };
 };
 
-export const FindPersonAsync = id => {
+/**
+ * Finds one specific user in provided list if one was included.
+ * Else it calls back-end for a person with the specific id
+ * @param {id} id The id for the requested person
+ * @param {people} people The list of people in the application - Optional
+ */
+export const FindPersonAsync = (id, people = []) => {
   return dispatch => {
+    // If a list was included it will go through it to find the requested person.
+    if (people !== null || people.length !== 0) {
+      const person = people.find(x => x.id === id);
+
+      // If the person was found it will call another method that saves the person to the redux store.
+      // Else it will call the backend for the user.
+      if (person !== undefined) {
+        dispatch(FindPerson(person));
+
+        return;
+      }
+    }
+
     dispatch(options.IsLoading(true));
 
     axios
