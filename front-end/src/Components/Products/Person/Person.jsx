@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import Loading from "../../UI/Loading";
 
@@ -49,7 +50,17 @@ class Person extends Component {
                     <td>{person.phoneNumber}</td>
                     <td>{person.city}</td>
                     <td>{person.postalCode}</td>
-                    <td>options</td>
+                    <td>
+                      <Link to={"/person/edit/:" + person.id}>
+                        <i className="fa fa-pencil-square-o" />
+                      </Link>
+                      <Link to={"/person/details/:" + person.id}>
+                        <i className="fa fa-info-circle" />
+                      </Link>
+                      <Link to={"/person/delete/:" + person.id}>
+                        <i className="fa fa-window-close-o" />
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>

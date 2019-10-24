@@ -18,8 +18,4 @@
     <ProjectReference Include="..\IdentityWithReact\IdentityWithReact.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IdentityWithReact\" />
-  </ItemGroup>
-
 </Project>
