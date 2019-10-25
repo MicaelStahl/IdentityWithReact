@@ -10,7 +10,7 @@ const GoBack = props => {
   return (
     <button
       onClick={() => onClick(props)}
-      className={`btn btn-primary btn-sm mb-3 ${
+      className={`btn btn-secondary btn-sm mb-3 ${
         float === true ? "float-left" : null
       }`}>
       Return

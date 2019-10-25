@@ -8,17 +8,23 @@ import ErrorPage from "./ErrorPage";
 import Edit from "../Products/Person/Edit";
 import Details from "../Products/Person/Details";
 import Delete from "../Products/Person/Delete";
+import Create from "../Products/Person/Create";
 
 /**
- * The main body containing all links.
+ * The main hub for route handling.
  */
 const Main = () => {
   return (
     <React.Fragment>
       <Switch>
         <Route exact path="/Person" component={Person} />
-        <Route exact path="/Person/Edit/:id" component={Edit} />
+
+        <Route exact path="/Person/create-new-person" component={Create} />
+
         <Route exact path="/Person/Details/:id" component={Details} />
+
+        <Route exact path="/Person/Edit/:id" component={Edit} />
+
         <Route exact path="/Person/Delete/:id" component={Delete} />
 
         <Route exact path="/" component={Home} />

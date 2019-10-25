@@ -8,6 +8,9 @@ import GoBackButton from "../../UI/GoBackButton";
 
 import * as options from "../../actions/actions/personActions";
 
+/**
+ * The details class for the Person model.
+ */
 class Details extends Component {
   state = {
     showMessage: false
@@ -35,7 +38,9 @@ class Details extends Component {
           <GoBackButton />
           {this.state.showMessage ? <div>{this.props.message}</div> : null}
           <div>
-            <div className="col-3 shadow">
+            <div className="col-3 shadow float-left">
+              <h3>Details</h3>
+              <hr />
               <div className="form-group">
                 <label>
                   <b>
@@ -60,7 +65,7 @@ class Details extends Component {
                     <ins>Email</ins>
                   </b>
                 </label>
-                <p>{person.email}</p>
+                <p className="overflow-auto">{person.email}</p>
               </div>
               <div className="form-group">
                 <label>
@@ -85,6 +90,29 @@ class Details extends Component {
                   </b>
                 </label>
                 <p>{person.postalCode}</p>
+              </div>
+            </div>
+            <div className="p-2 shadow float-left ml-3">
+              <h5 className="text-center">
+                <ins>Options</ins>
+              </h5>
+              <div className="container">
+                <ul className="list-unstyled">
+                  <li>
+                    <Link
+                      onClick={() => this.props.onLinkClick(person)}
+                      to={"/person/edit/:" + person.id}>
+                      Edit
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      onClick={() => this.props.onLinkClick(person)}
+                      to={"/person/delete/:" + person.id}>
+                      Delete
+                    </Link>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>

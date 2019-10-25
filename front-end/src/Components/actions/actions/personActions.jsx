@@ -1,5 +1,6 @@
 import * as options from "./optionsActions";
 import axios from "axios";
+import { isNullOrUndefined } from "util";
 
 export const CREATE_PERSON = "CREATE_PERSON";
 export const FIND_PERSON = "FIND_PERSON";
@@ -70,7 +71,7 @@ export const FindPerson = person => {
 export const FindPersonAsync = (id, people = []) => {
   return dispatch => {
     // If a list was included it will go through it to find the requested person.
-    if (people !== null || people.length !== 0) {
+    if (!isNullOrUndefined(people) || people.length !== 0) {
       const person = people.find(x => x.id === id);
 
       // If the person was found it will call another method that saves the person to the redux store.

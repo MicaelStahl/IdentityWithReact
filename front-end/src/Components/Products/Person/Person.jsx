@@ -61,21 +61,21 @@ class Person extends Component {
                         onClick={() =>
                           this.props.onLinkClick(person.id, this.props.people)
                         }
-                        to={"/person/edit/:" + person.id}>
+                        to={"/person/edit/id:" + person.id}>
                         <i className="fa fa-pen-square" />
                       </Link>
                       <Link
                         onClick={() =>
                           this.props.onLinkClick(person.id, this.props.people)
                         }
-                        to={"/person/details/:" + person.id}>
+                        to={"/person/details/id:" + person.id}>
                         <i className="fa fa-info-circle ml-1" />
                       </Link>
                       <Link
                         onClick={() =>
                           this.props.onLinkClick(person.id, this.props.people)
                         }
-                        to={"/person/delete/:" + person.id}>
+                        to={"/person/delete/id:" + person.id}>
                         <i className="fa fa-window-close ml-1" />
                       </Link>
                     </td>

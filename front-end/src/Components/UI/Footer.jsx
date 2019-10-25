@@ -7,7 +7,7 @@ const year = date.getFullYear();
 const Footer = props => {
   return (
     <div className="footer">
-      <div className="border-top shadow fixed-bottom">
+      <div className=" shadow border-top fixed-bottom bg-white">
         <div className="ml-3">&copy; - {year} - Micael Ståhl</div>
       </div>
     </div>
