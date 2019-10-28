@@ -62,7 +62,7 @@ namespace IdentityWithReact.Controllers
         #region Find
 
         [HttpGet("Find/{id}")]
-        public async Task<IActionResult> GetAsync(Guid id)
+        public async Task<IActionResult> GetAsync([FromRoute]Guid id)
         {
             try
             {
@@ -169,7 +169,7 @@ namespace IdentityWithReact.Controllers
         #region Delete
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync([FromRoute]Guid id)
         {
             try
             {

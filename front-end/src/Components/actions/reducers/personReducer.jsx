@@ -3,7 +3,8 @@ import * as personOptions from "../actions/personActions";
 const initialState = {
   person: [],
   people: [],
-  errorMessage: ""
+  errorMessage: "",
+  deleteMsg: ""
 };
 
 const reducer = (state = initialState, action) => {
@@ -20,7 +21,8 @@ const reducer = (state = initialState, action) => {
     case personOptions.FIND_PEOPLE:
       return {
         ...state,
-        people: action.people
+        people: action.people,
+        deleteMsg: ""
       };
 
     case personOptions.FIND_PERSON:
@@ -49,6 +51,7 @@ const reducer = (state = initialState, action) => {
     case personOptions.DELETE_PERSON:
       return {
         ...state,
+        deleteMsg: action.str,
         people: state.people.filter(x => x.id !== action.id)
       };
 
