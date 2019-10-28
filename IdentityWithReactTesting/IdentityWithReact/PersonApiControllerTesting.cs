@@ -117,14 +117,11 @@ namespace IdentityWithReactTesting.IdentityWithReact
         private readonly Mock<IPersonRepository> _service;
         private readonly PersonApiController _controller;
 
-        public PersonApiControllerTesting(ILogger<PersonApiController> logger)
+        public PersonApiControllerTesting()
         {
-            Logger = logger;
             _service = new Mock<IPersonRepository>();
-            _controller = new PersonApiController(_service.Object, Logger);
+            _controller = new PersonApiController(_service.Object);
         }
-
-        public ILogger<PersonApiController> Logger { get; }
 
         #endregion D.I
 
@@ -139,8 +136,8 @@ namespace IdentityWithReactTesting.IdentityWithReact
 
             var result = await _controller.CreateAsync(person);
 
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<Person>(viewResult.Model);
+            var viewResult = Assert.IsType<OkObjectResult>(result);
+            var model = Assert.IsAssignableFrom<Person>(viewResult.Value);
             Assert.Equal(person, model);
         }
 

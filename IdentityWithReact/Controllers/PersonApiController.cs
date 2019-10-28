@@ -18,12 +18,10 @@ namespace IdentityWithReact.Controllers
         #region D.I
 
         private readonly IPersonRepository _service;
-        private readonly ILogger<PersonApiController> _logger;
 
-        public PersonApiController(IPersonRepository service, ILogger<PersonApiController> logger)
+        public PersonApiController(IPersonRepository service)
         {
             _service = service;
-            _logger = logger;
         }
 
         #endregion D.I
@@ -35,12 +33,8 @@ namespace IdentityWithReact.Controllers
         {
             try
             {
-                _logger.LogInformation("Create Person {Person}");
-
                 if (!ModelState.IsValid)
                 {
-                    _logger.LogWarning(message: "Person {Person} could not be created: Invalid modelstate.");
-
                     return BadRequest(ModelState);
                 }
 
@@ -57,8 +51,6 @@ namespace IdentityWithReact.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(exception: ex.InnerException, ex.Message);
-
                 ModelState.AddModelError(string.Empty, ex.Message);
 
                 return BadRequest(ex.Message);
@@ -74,12 +66,8 @@ namespace IdentityWithReact.Controllers
         {
             try
             {
-                _logger.LogInformation("Find Person {Person} with {id}");
-
                 if (id == Guid.Empty)
                 {
-                    _logger.LogWarning(exception: new NullReferenceException(StatusMessages.EmptyId), StatusMessages.EmptyId);
-
                     ModelState.AddModelError(string.Empty, StatusMessages.EmptyId);
 
                     throw new Exception(StatusMessages.EmptyId);
@@ -89,8 +77,6 @@ namespace IdentityWithReact.Controllers
 
                 if (result.Message == ActionMessages.Found)
                 {
-                    _logger.LogInformation("Person {Person} was successfully found with {id}");
-
                     return Ok(result.Person);
                 }
                 else if (result.Message == StatusMessages.EmptyId)
@@ -99,8 +85,6 @@ namespace IdentityWithReact.Controllers
                 }
                 else if (result.Message == StatusMessages.NotFound)
                 {
-                    _logger.LogWarning(StatusMessages.NotFound, id);
-
                     ModelState.AddModelError(string.Empty, StatusMessages.NotFound);
 
                     return NotFound(StatusMessages.NotFound);
@@ -112,8 +96,6 @@ namespace IdentityWithReact.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(exception: ex.InnerException, ex.Message);
-
                 ModelState.AddModelError(string.Empty, ex.Message);
 
                 return BadRequest(ex.Message);
@@ -123,28 +105,20 @@ namespace IdentityWithReact.Controllers
         [HttpGet("find-all")]
         public async Task<IActionResult> GetAllAsync()
         {
-            _logger.LogInformation("Find all People {List<Person>}");
-
             var result = await _service.FindAll();
 
             if (result.Message == ActionMessages.Found)
             {
-                _logger.LogInformation("People {List<Person>} was successfully found.");
-
                 return Ok(result); // sending down entire viewmodel becasue react doesn't like getting lists sent down.
             }
             else if (result.Message == StatusMessages.EmptyList)
             {
-                _logger.LogWarning("No {List<Person>} was found.");
-
                 ModelState.AddModelError(string.Empty, StatusMessages.EmptyList);
 
                 return BadRequest(StatusMessages.EmptyList);
             }
             else
             {
-                _logger.LogError("Unexpected error: Something went wrong.");
-
                 ModelState.AddModelError(string.Empty, "Something went wrong.");
 
                 return BadRequest("Something went wrong.");
@@ -160,8 +134,6 @@ namespace IdentityWithReact.Controllers
         {
             try
             {
-                _logger.LogInformation("Update Person {Person} with {person} data");
-
                 if (!ModelState.IsValid)
                 {
                     throw new Exception(StatusMessages.InvalidFields);
@@ -171,14 +143,10 @@ namespace IdentityWithReact.Controllers
 
                 if (result.Message == ActionMessages.Updated)
                 {
-                    _logger.LogInformation("Person {Person} was successfully updated");
-
                     return Ok(result.Person);
                 }
                 else if (result.Message == StatusMessages.NotFound)
                 {
-                    _logger.LogWarning("Person {Person} could not be found with ID {person.Id}");
-
                     ModelState.AddModelError(string.Empty, result.Message);
 
                     return NotFound(result.Message);
@@ -190,8 +158,6 @@ namespace IdentityWithReact.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(exception: ex.InnerException, message: ex.Message);
-
                 ModelState.AddModelError(string.Empty, ex.Message);
 
                 return BadRequest(ex.Message);
@@ -207,8 +173,6 @@ namespace IdentityWithReact.Controllers
         {
             try
             {
-                _logger.LogInformation("Delete Person {Person} with ID {id}");
-
                 if (id == Guid.Empty)
                 {
                     throw new Exception(StatusMessages.EmptyId);
@@ -222,8 +186,6 @@ namespace IdentityWithReact.Controllers
                 }
                 else if (result == StatusMessages.NotFound)
                 {
-                    _logger.LogWarning("Person {Person} was not deleted: ID {id} did not match any people");
-
                     ModelState.AddModelError(string.Empty, "Unexpected error occurred: ID did not match any people.");
 
                     return NotFound(result);
@@ -235,8 +197,6 @@ namespace IdentityWithReact.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(exception: ex.InnerException, message: ex.Message);
-
                 ModelState.AddModelError(string.Empty, ex.Message);
 
                 return BadRequest(ex.Message);

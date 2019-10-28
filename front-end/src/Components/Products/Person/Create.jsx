@@ -260,6 +260,7 @@ class Create extends Component {
                 value={firstName}
                 onChange={this.handleChange}
                 className="form-control"
+                placeholder="Firstname"
                 required
                 autoFocus
               />
@@ -272,6 +273,7 @@ class Create extends Component {
                 value={lastName}
                 onChange={this.handleChange}
                 className="form-control"
+                placeholder="Lastname"
                 required
               />
             </div>
@@ -283,6 +285,7 @@ class Create extends Component {
                 value={age}
                 onChange={this.handleChange}
                 className="form-control"
+                placeholder="Age"
                 required
               />
             </div>
@@ -294,6 +297,7 @@ class Create extends Component {
                 value={email}
                 onChange={this.handleChange}
                 className="form-control"
+                placeholder="Email"
                 required
               />
             </div>
@@ -305,6 +309,7 @@ class Create extends Component {
                 value={phoneNumber}
                 onChange={this.handleChange}
                 className="form-control"
+                placeholder="Phonenumber"
                 required
               />
             </div>
@@ -316,6 +321,7 @@ class Create extends Component {
                 value={city}
                 onChange={this.handleChange}
                 className="form-control"
+                placeholder="City"
                 required
               />
             </div>
@@ -327,6 +333,7 @@ class Create extends Component {
                 value={postalCode}
                 onChange={this.handleChange}
                 className="form-control"
+                placeholder="Postal code"
                 required
               />
             </div>
