@@ -141,6 +141,180 @@ namespace IdentityWithReactTesting.IdentityWithReact
             Assert.Equal(person, model);
         }
 
+        [Fact]
+        [Trait("Category", "Person-Create")]
+        public async Task Create_InvalidModelState_ReturnsBadRequestObjectResultAsync()
+        {
+            var person = await TestReferences.OneInvalidPerson();
+            _controller.ModelState.AddModelError(string.Empty, "Unexpected error: Please check all fields and try again.");
+
+            var result = await _controller.CreateAsync(person);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        [Trait("Category", "Person-Create")]
+        public async Task Create_SubmitInvalidDataWithValidModelState_ReturnsBadRequestObjectResultAsync()
+        {
+            var person = await TestReferences.OneInvalidPerson();
+            _service.Setup(x => x.Create(person)).Returns(Task.FromResult(new PersonWithMessage { Message = StatusMessages.InvalidFields }));
+
+            var result = await _controller.CreateAsync(person);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
         #endregion Create
+
+        #region Find
+
+        [Fact]
+        [Trait("Category", "Person-Find")]
+        public async Task Find_SubmitValidId_ReturnsOkStatusWithCorrectPersonAsync()
+        {
+            var person = await TestReferences.OneValidPerson();
+            _service.Setup(x => x.Find(person.Id)).ReturnsAsync(new PersonWithMessage { Person = person, Message = ActionMessages.Found });
+
+            var result = await _controller.GetAsync(person.Id);
+
+            var objectResult = Assert.IsType<OkObjectResult>(result);
+            var model = Assert.IsAssignableFrom<Person>(objectResult.Value);
+            Assert.Equal(person, model);
+        }
+
+        [Fact]
+        [Trait("Category", "Person-Find")]
+        public async Task Find_SubmitInvalidId_ReturnsBadRequestObjectResultAsync()
+        {
+            var fakeId = await TestReferences.IdGeneration();
+
+            var result = await _controller.GetAsync(fakeId);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        [Trait("Category", "Person-Find")]
+        public async Task Find_SubmitValidId_ReturnsNotFoundObjectResultAsync()
+        {
+            var fakeId = Guid.NewGuid();
+            _service.Setup(x => x.Find(fakeId)).Returns(Task.FromResult(new PersonWithMessage { Message = StatusMessages.NotFound }));
+
+            var result = await _controller.GetAsync(fakeId);
+
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+
+        [Fact]
+        [Trait("Category", "Person-FindAll")]
+        public async Task FindAll_CallMethod_ReturnsOkStatusWithTwoPeopleAsync()
+        {
+            var people = await TestReferences.TwoValidPeople();
+            _service.Setup(x => x.FindAll()).ReturnsAsync(new PersonListWithMessage { People = people, Message = ActionMessages.Found });
+
+            var result = await _controller.GetAllAsync();
+
+            var viewResult = Assert.IsType<OkObjectResult>(result);
+            var model = Assert.IsAssignableFrom<PersonListWithMessage>(viewResult.Value);
+            Assert.Equal(people, model.People);
+        }
+
+        [Fact]
+        [Trait("Category", "Person-FindAll")]
+        public async Task FindAll_CallMethod_ReturnsBadRequestObjectResultIfListIsEmptyAsync()
+        {
+            _service.Setup(x => x.FindAll()).Returns(Task.FromResult(new PersonListWithMessage { Message = StatusMessages.EmptyList }));
+
+            var result = await _controller.GetAllAsync();
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        #endregion Find
+
+        #region Edit
+
+        [Fact]
+        [Trait("Category", "Person-Edit")]
+        public async Task Edit_SubmitValidData_ReturnsOkStatusWithUpdatedPersonAsync()
+        {
+            var person = await TestReferences.OneValidPerson();
+            _service.Setup(x => x.Edit(person)).ReturnsAsync(new PersonWithMessage { Person = person, Message = ActionMessages.Updated });
+
+            var result = await _controller.EditAsync(person);
+
+            var viewResult = Assert.IsType<OkObjectResult>(result);
+            var model = Assert.IsAssignableFrom<Person>(viewResult.Value);
+            Assert.Equal(person, model);
+        }
+
+        [Fact]
+        [Trait("Category", "Person-Edit")]
+        public async Task Edit_InvalidModelState_ReturnsBadRequestObjectResultAsync()
+        {
+            var person = await TestReferences.OneInvalidPerson();
+            _controller.ModelState.AddModelError(string.Empty, "Unexpected error: Please check all fields and try again.");
+
+            var result = await _controller.EditAsync(person);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        [Trait("Category", "Person-Edit")]
+        public async Task Edit_SubmitValidDataInvalidId_ReturnsNotFoundObjectResultAsync()
+        {
+            var person = await TestReferences.OneValidPerson();
+            person.Id = Guid.Empty;
+            _service.Setup(x => x.Edit(person)).Returns(Task.FromResult(new PersonWithMessage { Message = StatusMessages.NotFound }));
+
+            var result = await _controller.EditAsync(person);
+
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+
+        #endregion Edit
+
+        #region Delete
+
+        [Fact]
+        [Trait("Category", "Person-Delete")]
+        public async Task Delete_SubmitValidId_ReturnsOkStatusIndicatingPersonWasRemovedAsync()
+        {
+            var id = await TestReferences.IdGeneration();
+            _service.Setup(x => x.Delete(id)).ReturnsAsync(ActionMessages.Deleted);
+
+            var result = await _controller.DeleteAsync(id);
+
+            var viewResult = Assert.IsType<OkObjectResult>(result);
+            var model = Assert.IsAssignableFrom<string>(viewResult.Value);
+            Assert.Equal(ActionMessages.Deleted, model);
+        }
+
+        [Fact]
+        [Trait("Category", "Person-Delete")]
+        public async Task Delete_SubmitValidId_ReturnsNotFoundObjectResultAsync()
+        {
+            var id = await TestReferences.IdGeneration();
+            _service.Setup(x => x.Delete(id)).Returns(Task.FromResult(StatusMessages.NotFound));
+
+            var result = await _controller.DeleteAsync(id);
+
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+
+        [Fact]
+        [Trait("Category", "Person-Delete")]
+        public async Task Delete_SubmitInvalidId_ReturnsBadRequestObjectResultAsync()
+        {
+            var id = Guid.Empty;
+
+            var result = await _controller.DeleteAsync(id);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        #endregion Delete
     }
 }
