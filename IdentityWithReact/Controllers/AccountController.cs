@@ -40,10 +40,101 @@ namespace IdentityWithReact.Controllers
 
         #endregion D.I
 
+        /// <summary>
+        /// Only ever used when the token used is outdated.
+        /// </summary>
+        /// <param name="id">The ID of the active user.</param>
+        /// <returns></returns>
+        [AllowAnonymous] // Forced to use this since the application otherwise tries to check the jwt-token.
+        [HttpGet("update-token/{id}")]
+        public async Task<IActionResult> UpdateToken([FromHeader]string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                _logger.LogWarning("id {id} was blank.");
+
+                return BadRequest("The given ID was blank.");
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                _logger.LogWarning($"No user was found with given ID: {id}");
+
+                return NotFound("No user was found with given ID.");
+            }
+
+            return Ok(new FrontEndUpdate { ActiveId = user.Id, Email = user.Email, JwtToken = await _token.JwtTokenGeneration() });
+        }
+
+        #region SignIn / SignOut
+
+        [AllowAnonymous]
+        [HttpPost("signin")]
+        public async Task<IActionResult> SignIn([FromBody]SignIn signIn)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid credentials: One or more fields were invalid.");
+
+                ModelState.AddModelError(string.Empty, "Invalid credentials: One or more fields were invalid.");
+
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByEmailAsync(signIn.Email);
+
+            if (user == null)
+            {
+                _logger.LogWarning($"Unexpected error: No user with given email {signIn.Email} exists.", signIn.Email);
+
+                ModelState.AddModelError(string.Empty, $"Unexpected error: No user with given email {signIn.Email} eixsts.");
+
+                return NotFound($"Unexpected error: No user with given email {signIn.Email} exists.");
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user, signIn.Password, false, false);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest("Username or password were invalid.");
+            }
+
+            return Ok(new FrontEndUpdate
+            {
+                Message = "User was successfully signed in.",
+                ActiveId = user.Id,
+                Email = user.Email,
+                JwtToken = await _token.JwtTokenGeneration()
+            });
+        }
+
+        [HttpGet("sign-out")]
+        public async Task<IActionResult> SignOut()
+        {
+            await _signInManager.SignOutAsync();
+
+            if (_signInManager.IsSignedIn(User))
+            {
+                _logger.LogError($"User {User} could not be logged out.");
+
+                return BadRequest("Something went wrong when logging out user. Please try again.");
+            }
+            else
+            {
+                _logger.LogInformation("User successfully logged out.");
+
+                return Ok("User was successfully logged out.");
+            }
+        }
+
+        #endregion SignIn / SignOut
+
         #region Create
 
         [AllowAnonymous]
-        [HttpGet("register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]RegisterUser user)
         {
             if (!ModelState.IsValid)
@@ -86,7 +177,7 @@ namespace IdentityWithReact.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(new JwtTokenWithMessage { Message = "User was successfully created.", JwtToken = await _token.JwtTokenGeneration() });
+            return Ok("User was successfully created.");
         }
 
         // Send email method here later.

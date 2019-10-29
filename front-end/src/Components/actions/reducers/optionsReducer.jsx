@@ -1,7 +1,8 @@
 import * as actionOptions from "../actions/optionsActions";
 
 const initialState = {
-  isLoading: false
+  isLoading: false,
+  errorMessage: ""
 };
 
 const reducer = (state = initialState, action) => {
@@ -9,7 +10,14 @@ const reducer = (state = initialState, action) => {
     case actionOptions.IS_LOADING:
       return {
         ...state,
-        isLoading: action.isLoading
+        isLoading: action.isLoading,
+        errorMessage: ""
+      };
+
+    case actionOptions.ERROR_MESSAGE:
+      return {
+        ...state,
+        errorMessage: action.errorMessage
       };
 
     default:

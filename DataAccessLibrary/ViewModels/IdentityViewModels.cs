@@ -57,6 +57,21 @@ namespace DataAccessLibrary.ViewModels
         public string UserId { get; set; }
     }
 
+    /// <summary>
+    /// Contains a username (Email) and password for signing in.
+    /// </summary>
+    public class SignIn
+    {
+        [Required]
+        [EmailAddress]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+    }
+
     #endregion Backend Models
 
     #region Frontend Models
@@ -124,6 +139,20 @@ namespace DataAccessLibrary.ViewModels
         /// A list of all Users in the application.
         /// </summary>
         public List<FrontUser> UserList { get; set; }
+    }
+
+    /// <summary>
+    /// Used for updating front-end with new verification variables.
+    /// </summary>
+    public class FrontEndUpdate : ActiveUser
+    {
+        [EmailAddress]
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Used to give the user a message indicating the action was a succss.
+        /// </summary>
+        public string Message { get; set; }
     }
 
     #endregion Frontend Models

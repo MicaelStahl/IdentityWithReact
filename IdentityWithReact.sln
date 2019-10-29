@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLibrary", "DataAc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLibrary", "BusinessLibrary\BusinessLibrary.csproj", "{6638EBCA-AB31-4FD3-B64B-E7EE5DAD233E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityWithReactTesting", "IdentityWithReactTesting\IdentityWithReactTesting.csproj", "{309D7BF0-16DB-485B-A29F-63B610A1A565}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityWithReactTesting", "IdentityWithReactTesting\IdentityWithReactTesting.csproj", "{309D7BF0-16DB-485B-A29F-63B610A1A565}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLibraryTesting", "BusinessLibraryTesting\BusinessLibraryTesting.csproj", "{967D3BBC-7C65-4FC0-8338-F98F12083446}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{309D7BF0-16DB-485B-A29F-63B610A1A565}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{309D7BF0-16DB-485B-A29F-63B610A1A565}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{309D7BF0-16DB-485B-A29F-63B610A1A565}.Release|Any CPU.Build.0 = Release|Any CPU
+		{967D3BBC-7C65-4FC0-8338-F98F12083446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{967D3BBC-7C65-4FC0-8338-F98F12083446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{967D3BBC-7C65-4FC0-8338-F98F12083446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{967D3BBC-7C65-4FC0-8338-F98F12083446}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
