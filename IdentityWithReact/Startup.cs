@@ -104,12 +104,14 @@ namespace IdentityWithReact
                     .Build();
                 });
             });
+
             // This adds the possibility to convert enum values to their respective string values.
             services.AddMvc().AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     options.JsonSerializerOptions.IgnoreNullValues = true;
-                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
