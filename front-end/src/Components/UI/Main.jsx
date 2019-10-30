@@ -9,6 +9,7 @@ import Edit from "../Products/Person/Edit";
 import Details from "../Products/Person/Details";
 import Delete from "../Products/Person/Delete";
 import Create from "../Products/Person/Create";
+import SignIn from "../identity/SignIn";
 
 /**
  * The main hub for route handling.
@@ -17,6 +18,8 @@ const Main = () => {
   return (
     <React.Fragment>
       <Switch>
+        {/* -------------------- person section -------------------- */}
+
         <Route exact path="/Person" component={Person} />
 
         <Route exact path="/Person/create-new-person" component={Create} />
@@ -26,6 +29,12 @@ const Main = () => {
         <Route exact path="/Person/Edit/:id" component={Edit} />
 
         <Route exact path="/Person/Delete/:id" component={Delete} />
+
+        {/* -------------------- identity section -------------------- */}
+
+        <Route exact path="/Login" component={SignIn} />
+
+        {/* -------------------- miscellaneous section -------------------- */}
 
         <Route exact path="/" component={Home} />
 

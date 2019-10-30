@@ -1,8 +1,11 @@
 import React from "react";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 
-const Navbar = () => {
+import * as options from "../actions/actions/identityActions";
+
+const Navbar = props => {
+  const { isAuthenticated, roles, email, onSignOutClick } = props;
   return (
     <React.Fragment>
       <header>
@@ -28,11 +31,31 @@ const Navbar = () => {
               </li>
             </ul>
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <NavLink className="btn nav-link" to="/login">
-                  Login
-                </NavLink>
-              </li>
+              {isAuthenticated ? (
+                <React.Fragment>
+                  {roles.includes("Administrator") ? (
+                    <NavLink to="/users" className="btn nav-link">
+                      <i className="fa fa-users" /> Users
+                    </NavLink>
+                  ) : null}
+                  <NavLink className="nav-link" to="/profile">
+                    <small>Hello {email}!</small>
+                  </NavLink>
+                  <li>
+                    <button
+                      onClick={() => onSignOutClick()}
+                      className="btn nav-link">
+                      Logout
+                    </button>
+                  </li>
+                </React.Fragment>
+              ) : (
+                <li className="nav-item">
+                  <NavLink className="btn nav-link" to="/login">
+                    Login
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
         </nav>
@@ -41,4 +64,21 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.identity.isAuthenticated,
+    roles: state.identity.roles,
+    email: state.identity.email
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onSignOutClick: () => dispatch(options.SignOutAsync())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Navbar);

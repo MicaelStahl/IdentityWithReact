@@ -48,7 +48,6 @@ namespace DataAccessLibrary.Database
             {
                 AppUser user = new AppUser
                 {
-                    UserName = "Administrator@context.com",
                     FirstName = "Administrator",
                     LastName = "Admin",
                     Age = 31,
@@ -57,6 +56,8 @@ namespace DataAccessLibrary.Database
                     PhoneNumber = "123456789",
                     IsAdmin = true
                 };
+
+                user.UserName = user.Email;
 
                 var result = _userManager.CreateAsync(user, "Password!23").Result;
 
@@ -72,7 +73,6 @@ namespace DataAccessLibrary.Database
             {
                 AppUser user = new AppUser
                 {
-                    UserName = "NormalUser@context.com",
                     FirstName = "NormalUser",
                     LastName = "User",
                     Age = 35,
@@ -81,6 +81,8 @@ namespace DataAccessLibrary.Database
                     PhoneNumber = "123456789",
                     IsAdmin = false
                 };
+
+                user.UserName = user.Email;
 
                 var result = _userManager.CreateAsync(user, "Password!23").Result;
 

@@ -4,76 +4,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataAccessLibrary.ViewModels
 {
-    #region Backend Models
-
-    /// <summary>
-    /// User for registration purposes.
-    /// </summary>
-    public class RegisterUser : AppUser
-    {
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [Required]
-        [Compare("Password", ErrorMessage = "The passwords has to match.")]
-        public string ConfirmPassword { get; set; }
-    }
-
-    /// <summary>
-    /// Contains two tokens used for authentication for signed in users.
-    /// <para>UserToken: Token used to verify user on backend. DEPRECATED</para>
-    /// <para>JwtToken: Used to verify call between frontend and backend.</para>
-    /// </summary>
-    public class Tokens
-    {
-        /// <summary>
-        /// User-token used to verify the active user. Currently not used.
-        /// </summary>
-        //public string UserToken { get; set; }
-
-        /// <summary>
-        /// Jwt-token used to verify user between backend and frontend calls.
-        /// </summary>
-        public string JwtToken { get; set; }
-    }
-
-    /// <summary>
-    /// Contains the active users ID
-    /// </summary>
-    public class ActiveUser : Tokens
-    {
-        /// <summary>
-        /// The active users ID. Will always be the same as the "UserId" except for when an admin wants to inspect a user.
-        /// </summary>
-        public string ActiveId { get; set; }
-    }
-
-    /// <summary>
-    /// Contains the requested users ID and polymorphed with <see cref="ActiveUser"/>
-    /// </summary>
-    public class GetUserVM : ActiveUser
-    {
-        public string UserId { get; set; }
-    }
-
-    /// <summary>
-    /// Contains a username (Email) and password for signing in.
-    /// </summary>
-    public class SignIn
-    {
-        [Required]
-        [EmailAddress]
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-    }
-
-    #endregion Backend Models
-
     #region Frontend Models
 
     /// <summary>
@@ -150,10 +80,85 @@ namespace DataAccessLibrary.ViewModels
         public string Email { get; set; }
 
         /// <summary>
-        /// Used to give the user a message indicating the action was a succss.
+        /// A list containing all the roles the active user is in.
+        /// </summary>
+        public IList<string> Roles { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Used to give the user a message indicating the action was a success.
         /// </summary>
         public string Message { get; set; }
     }
 
     #endregion Frontend Models
+
+    #region Backend Models
+
+    /// <summary>
+    /// User for registration purposes.
+    /// </summary>
+    public class RegisterUser : AppUser
+    {
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required]
+        [Compare("Password", ErrorMessage = "The passwords has to match.")]
+        public string ConfirmPassword { get; set; }
+    }
+
+    /// <summary>
+    /// Contains two tokens used for authentication for signed in users.
+    /// <para>UserToken: Token used to verify user on backend. DEPRECATED</para>
+    /// <para>JwtToken: Used to verify call between frontend and backend.</para>
+    /// </summary>
+    public class Tokens
+    {
+        /// <summary>
+        /// User-token used to verify the active user. Currently not used.
+        /// </summary>
+        //public string UserToken { get; set; }
+
+        /// <summary>
+        /// Jwt-token used to verify user between backend and frontend calls.
+        /// </summary>
+        public string JwtToken { get; set; }
+    }
+
+    /// <summary>
+    /// Contains the active users ID
+    /// </summary>
+    public class ActiveUser : Tokens
+    {
+        /// <summary>
+        /// The active users ID. Will always be the same as the "UserId" except for when an admin wants to inspect a user.
+        /// </summary>
+        public string ActiveId { get; set; }
+    }
+
+    /// <summary>
+    /// Contains the requested users ID and polymorphed with <see cref="ActiveUser"/>
+    /// </summary>
+    public class GetUserVM : ActiveUser
+    {
+        public string UserId { get; set; }
+    }
+
+    /// <summary>
+    /// Contains a username (Email) and password for signing in.
+    /// </summary>
+    public class SignIn
+    {
+        [Required]
+        [EmailAddress]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+    }
+
+    #endregion Backend Models
 }

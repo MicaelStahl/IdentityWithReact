@@ -17,14 +17,12 @@ namespace BusinessLibrary.Repositories
     {
         #region D.I
 
-        private readonly ILogger<TokenGeneration> _logger;
         private readonly UserManager<AppUser> _userManager;
         private readonly AppSettingsToken _token;
 
-        public TokenGeneration(ILogger<TokenGeneration> logger, UserManager<AppUser> userManager,
+        public TokenGeneration(UserManager<AppUser> userManager,
             IOptions<AppSettingsToken> token)
         {
-            _logger = logger;
             _userManager = userManager;
             _token = token.Value;
         }
@@ -58,7 +56,8 @@ namespace BusinessLibrary.Repositories
 
                 return await Task.FromResult(new JwtSecurityTokenHandler().WriteToken(tokenOptions));
 
-                // // Another way to write a Jwt-token
+                #region Another Jwt-token
+
                 //var tokenHandler = new JwtSecurityTokenHandler();
                 //var key = Encoding.ASCII.GetBytes(_token.Secret);
                 //var tokenDescriptor = new SecurityTokenDescriptor
@@ -70,10 +69,11 @@ namespace BusinessLibrary.Repositories
                 //};
                 //var token = tokenHandler.CreateToken(tokenDescriptor);
                 //return await Task.FromResult(tokenHandler.WriteToken(token));
+
+                #endregion Another Jwt-token
             }
             catch (Exception ex)
             {
-                _logger.LogError(exception: ex.InnerException, message: ex.Message, ex);
                 throw ex;
             }
         }
@@ -97,8 +97,7 @@ namespace BusinessLibrary.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(exception: ex, message: ex.Message, ex);
-                throw;
+                throw ex;
             }
         }
     }

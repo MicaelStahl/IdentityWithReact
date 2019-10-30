@@ -12,7 +12,7 @@ namespace DataAccessLibrary.Models
         [Required]
         [EmailAddress]
         [DataType(DataType.EmailAddress)]
-        public override string UserName { get => base.UserName; set => base.UserName = Email; }
+        public override string UserName { get; set; } /*{ get => base.UserName; set => base.UserName = Email; }*/
 
         [Required]
         [Display(Name = "Firstname")]

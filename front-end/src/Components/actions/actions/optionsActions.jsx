@@ -2,6 +2,7 @@ import axios from "axios";
 
 export const IS_LOADING = "IS_LOADING";
 export const ERROR_MESSAGE = "ERROR_MESSAGE";
+export const SET_USER = "SET_USER";
 
 /**
  * Method handling loading functions.
@@ -30,8 +31,11 @@ export const CancelToken = () => {
  * @param {user.activeId} user.activeId active ID value
  */
 export const SetUser = user => {
-  localStorage.setItem("jwt-token", user.jwtToken);
-  localStorage.setItem("active-id", user.activeId);
+  return {
+    type: SET_USER,
+    activeId: user.activeId,
+    jwtToken: user.jwtToken
+  };
 };
 
 /**

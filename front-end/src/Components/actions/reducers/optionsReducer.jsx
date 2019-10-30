@@ -20,6 +20,11 @@ const reducer = (state = initialState, action) => {
         errorMessage: action.errorMessage
       };
 
+    case actionOptions.SET_USER:
+      localStorage.setItem("jwt-token", action.jwtToken);
+      localStorage.setItem("active-id", action.activeId);
+      break;
+
     default:
       break;
   }

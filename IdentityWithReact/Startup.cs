@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace IdentityWithReact
 {
@@ -34,6 +35,7 @@ namespace IdentityWithReact
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<ITokenGeneration, TokenGeneration>();
 
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
@@ -62,6 +64,9 @@ namespace IdentityWithReact
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
             });
+
+            // Enables access to "AppSettingsToken" in Appsettings.json
+            services.Configure<AppSettingsToken>(Configuration.GetSection("AppSettingsToken"));
 
             // Cookie configuration.
             services.Configure<CookiePolicyOptions>(options =>

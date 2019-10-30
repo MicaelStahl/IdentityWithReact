@@ -1,22 +1,23 @@
 import * as identity from "../actions/identityActions";
-import { bindActionCreators } from "../../../../../../../../AppData/Local/Microsoft/TypeScript/3.6/node_modules/redux";
 
 const InitialState = {
   user: [],
   users: [],
   isAuthenticated: false,
   message: "",
-  email: ""
+  email: "",
+  roles: []
 };
 
-export default reducer = (state = InitialState, action) => {
+const reducer = (state = InitialState, action) => {
   switch (action.type) {
     case identity.SIGN_IN:
       return {
         ...state,
         isAuthenticated: true,
         message: action.message,
-        email: action.email
+        email: action.email,
+        roles: action.roles
       };
 
     case identity.SIGN_OUT:
@@ -40,3 +41,5 @@ export default reducer = (state = InitialState, action) => {
   }
   return state;
 };
+
+export default reducer;

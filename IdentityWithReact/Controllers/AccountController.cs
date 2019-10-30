@@ -103,10 +103,11 @@ namespace IdentityWithReact.Controllers
 
             return Ok(new FrontEndUpdate
             {
-                Message = "User was successfully signed in.",
-                ActiveId = user.Id,
                 Email = user.Email,
-                JwtToken = await _token.JwtTokenGeneration()
+                ActiveId = user.Id,
+                Message = "User was successfully signed in",
+                JwtToken = await _token.JwtTokenGeneration(),
+                Roles = await _userManager.GetRolesAsync(user)
             });
         }
 
@@ -150,6 +151,8 @@ namespace IdentityWithReact.Controllers
 
                 return BadRequest(new IdentityErrorDescriber().DuplicateEmail(user.Email).Description);
             }
+
+            user.UserName = user.Email;
 
             var result = await _userManager.CreateAsync(user, user.Password);
 

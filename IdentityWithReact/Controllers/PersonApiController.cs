@@ -109,7 +109,7 @@ namespace IdentityWithReact.Controllers
 
             if (result.Message == ActionMessages.Found)
             {
-                return Ok(result); // sending down entire viewmodel becasue react doesn't like getting lists sent down.
+                return Ok(result); // sending down entire viewmodel because react doesn't like getting lists sent down.
             }
             else if (result.Message == StatusMessages.EmptyList)
             {

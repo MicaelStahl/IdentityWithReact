@@ -13,11 +13,12 @@ const url = "http://localhost:49420/api/Account/";
 
 //#region SignIn
 
-const SignIn = (message, email) => {
+const SignIn = (message, email, roles = []) => {
   return {
     type: SIGN_IN,
     message,
-    email
+    email,
+    roles
   };
 };
 
@@ -28,7 +29,7 @@ const SignIn = (message, email) => {
 export const SignInAsync = signIn => {
   return dispatch => {
     axios
-      .post(url + "sign-in", signIn, {
+      .post(url + "signin", signIn, {
         cancelToken: options.CancelToken(),
         validateStatus: function(status) {
           return status <= 500;
@@ -39,8 +40,15 @@ export const SignInAsync = signIn => {
         }
       })
       .then(response => {
+        console.log("response", response);
         if (response.status === 200) {
-          dispatch(SignIn(response.data.message, response.data.email));
+          dispatch(
+            SignIn(
+              response.data.message,
+              response.data.email,
+              response.data.roles
+            )
+          );
 
           const user = {
             activeId: response.data.activeId,
@@ -81,7 +89,7 @@ export const SignOutAsync = () => {
     // ToDo
     axios.interceptors.request.use(
       config => {
-        const token = options.jwtToken();
+        const token = options.GetJwtToken();
 
         if (token !== undefined || token !== null) {
           config.headers["Authorization"] = `Bearer ${token}`;
