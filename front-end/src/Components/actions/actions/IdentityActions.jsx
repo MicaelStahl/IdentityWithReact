@@ -128,7 +128,7 @@ export const SignOutAsync = () => {
 
 //#endregion
 
-//#region
+//#region Register
 
 const Register = message => {
   return {
@@ -163,6 +163,75 @@ export const RegisterAsync = user => {
       .catch(err => {
         console.error(err);
         Promise.reject(err);
+      });
+  };
+};
+
+//#endregion
+
+//#region FindUser
+
+const FindUser = user => {
+  return {
+    type: GET_USER,
+    user
+  };
+};
+
+export const FindUserAsync = id => {
+  return dispatch => {
+    axios.interceptors.request.use(
+      config => {
+        const token = options.GetJwtToken();
+
+        if (token !== undefined || token !== null) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+          config.headers["Access-Control-Allow-Origin"] = "*";
+          config.headers["withCredentials"] = true;
+        }
+
+        return config;
+      },
+      error => {
+        return Promise.reject(error);
+      }
+    );
+
+    const getUser = {
+      ActiveId: options.GetUser(),
+      UserId: id
+    };
+
+    axios
+      .post(url + "find-one", getUser, {
+        cancelToken: options.CancelToken(),
+        validateStatus: function(status) {
+          return status <= 500;
+        }
+      })
+      .then(response => {
+        if (response.status === 200) {
+          const activeUser = {
+            activeId: response.data.verification.activeId,
+            jwtToken: response.data.verification.jwtToken
+          };
+
+          dispatch(options.SetUser(activeUser));
+
+          const user = {
+            Id: response.data.id,
+            UserName: response.data.userName,
+            FirstName: response.data.firstName,
+            LastName: response.data.lastName,
+            Age: response.data.age,
+            Email: response.data.email,
+            PhoneNumber: response.data.phoneNumber,
+            City: response.data.city,
+            PostalCode: response.data.postalCode
+          };
+
+          dispatch(FindUser(user));
+        }
       });
   };
 };

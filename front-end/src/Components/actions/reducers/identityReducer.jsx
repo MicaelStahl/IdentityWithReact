@@ -36,6 +36,12 @@ const reducer = (state = InitialState, action) => {
         message: action.message
       };
 
+    case identity.GET_USER:
+      return {
+        ...state,
+        user: action.user
+      };
+
     default:
       break;
   }

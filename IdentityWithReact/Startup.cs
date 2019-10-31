@@ -31,12 +31,15 @@ namespace IdentityWithReact
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Creates a database in MYSQL after finding a "DefaultConnection" string in appsettings.json
             services.AddDbContext<ReactDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            // Scoped repositores and interfaces to make them dependency injectable
             services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<ITokenGeneration, TokenGeneration>();
 
+            // Creates default identity settings for the application
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8; // Changes Minimum-length from default value of 6 to 8.
@@ -154,11 +157,6 @@ namespace IdentityWithReact
                 endpoints.MapControllerRoute(
                     name: "PersonApi",
                     pattern: "api/{controller=PersonApi}");
-
-                //endpoints.MapGet("/", async context =>
-                //{
-                //    await context.Response.WriteAsync("Hello World!");
-                //});
             });
         }
     }

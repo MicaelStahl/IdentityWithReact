@@ -38,7 +38,12 @@ const Navbar = props => {
                       <i className="fa fa-users" /> Users
                     </NavLink>
                   ) : null}
-                  <NavLink className="nav-link" to="/profile">
+                  <NavLink
+                    className="nav-link"
+                    to="/profile"
+                    onClick={() =>
+                      onProfileClick(localStorage.getItem("active-id"))
+                    }>
                     <small>Hello {email}!</small>
                   </NavLink>
                   <li>
@@ -74,7 +79,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSignOutClick: () => dispatch(options.SignOutAsync())
+    onSignOutClick: () => dispatch(options.SignOutAsync()),
+    onProfileClick: id => dispatch(options.FindUserAsync(id))
   };
 };
 
