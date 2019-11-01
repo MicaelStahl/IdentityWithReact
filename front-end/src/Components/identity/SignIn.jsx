@@ -33,6 +33,10 @@ class SignIn extends Component {
     this.props.onSignInSubmit(user);
 
     this.setState({ submitted: true });
+
+    setTimeout(() => {
+      this.setState({ submitted: false });
+    }, 2000);
   };
 
   render() {
@@ -42,12 +46,11 @@ class SignIn extends Component {
         <Title Title="Sign in" />
         <GoBackButton />
 
-        {(submitted && this.props.message === undefined) ||
-        this.props.message === null ? (
-          <p className="container text-center text-success font-weight-bold">
-            The sign in request was successfully sent.
+        {submitted === false ? null : (
+          <p className="text-center text-success font-weight-bold">
+            {this.props.message}
           </p>
-        ) : null}
+        )}
 
         <div className="col-3 shadow container center p-3">
           <h3>Sign in</h3>

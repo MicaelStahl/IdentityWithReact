@@ -10,6 +10,7 @@ import Details from "../Products/Person/Details";
 import Delete from "../Products/Person/Delete";
 import Create from "../Products/Person/Create";
 import SignIn from "../identity/SignIn";
+import Profile from "../users/Profile";
 
 /**
  * The main hub for route handling.
@@ -33,6 +34,8 @@ const Main = () => {
         {/* -------------------- identity section -------------------- */}
 
         <Route exact path="/Login" component={SignIn} />
+
+        <Route exact path="/profile" component={Profile} />
 
         {/* -------------------- miscellaneous section -------------------- */}
 

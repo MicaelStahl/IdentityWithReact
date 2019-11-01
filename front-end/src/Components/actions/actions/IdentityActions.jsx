@@ -102,8 +102,9 @@ export const SignOutAsync = () => {
         return Promise.reject(error);
       }
     );
+    const id = options.GetUser();
     axios
-      .get(url + "sign-out", {
+      .get(url + "sign-out/" + id, {
         "Content-Type": "application/json",
         cancelToken: options.CancelToken(),
         validateStatus: function(status) {
@@ -197,6 +198,8 @@ export const FindUserAsync = id => {
       }
     );
 
+    dispatch(options.IsLoading(true));
+
     const getUser = {
       ActiveId: options.GetUser(),
       UserId: id
@@ -219,19 +222,27 @@ export const FindUserAsync = id => {
           dispatch(options.SetUser(activeUser));
 
           const user = {
-            Id: response.data.id,
-            UserName: response.data.userName,
-            FirstName: response.data.firstName,
-            LastName: response.data.lastName,
-            Age: response.data.age,
-            Email: response.data.email,
-            PhoneNumber: response.data.phoneNumber,
-            City: response.data.city,
-            PostalCode: response.data.postalCode
+            id: response.data.id,
+            userName: response.data.userName,
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            age: response.data.age,
+            email: response.data.email,
+            phoneNumber: response.data.phoneNumber,
+            isAdmin: response.data.isAdmin
           };
 
           dispatch(FindUser(user));
+        } else if (response.status === 404 || response.status === 400) {
+          dispatch(options.ErrorMessage(response.data));
+        } else {
+          dispatch(options.ErrorMessage("Something went wrong."));
         }
+        dispatch(options.IsLoading(false));
+      })
+      .catch(err => {
+        console.error(err);
+        Promise.reject(err);
       });
   };
 };

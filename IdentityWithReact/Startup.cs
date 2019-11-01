@@ -1,10 +1,12 @@
 using System;
+using System.Text;
 using System.Text.Json.Serialization;
 using BusinessLibrary.Interfaces;
 using BusinessLibrary.Repositories;
 using DataAccessLibrary.Database;
 using DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace IdentityWithReact
 {
@@ -57,7 +60,23 @@ namespace IdentityWithReact
             services.AddIdentityServer()
                 .AddApiAuthorization<AppUser, ReactDbContext>();
 
-            services.AddAuthentication()
+            services.AddAuthentication();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(config =>
+            {
+                config.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = "http://localhost:3000",
+                    ValidAudience = "http://localhost:3000",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("AppSettingsToken:Secret").Value))
+                };
+            })
                 .AddIdentityServerJwt();
 
             // Makes it possible for frameworks to add this into their dependencies.

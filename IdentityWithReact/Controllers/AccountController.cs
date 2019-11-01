@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BusinessLibrary.Interfaces;
 using DataAccessLibrary.Models;
 using DataAccessLibrary.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -14,9 +15,9 @@ using Microsoft.Extensions.Logging;
 
 namespace IdentityWithReact.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AccountController : ControllerBase
     {
         #region D.I
@@ -39,6 +40,8 @@ namespace IdentityWithReact.Controllers
         }
 
         #endregion D.I
+
+        #region UpdateToken
 
         /// <summary>
         /// Only ever used when the token used is outdated.
@@ -67,6 +70,8 @@ namespace IdentityWithReact.Controllers
 
             return Ok(new FrontEndUpdate { ActiveId = user.Id, Email = user.Email, JwtToken = await _token.JwtTokenGeneration() });
         }
+
+        #endregion UpdateToken
 
         #region SignIn / SignOut
 
@@ -111,9 +116,25 @@ namespace IdentityWithReact.Controllers
             });
         }
 
-        [HttpGet("sign-out")]
-        public async Task<IActionResult> SignOut()
+        [HttpGet("sign-out/{id}")]
+        public async Task<IActionResult> SignOut([FromRoute]string id)
         {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                _logger.LogError("ID {id} is blank.");
+
+                return BadRequest("Could not sign out user: The active users ID is blank.");
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                _logger.LogError($"User could not be found with the given ID: {id}");
+
+                return NotFound("No user was found with the active users ID.");
+            }
+
             await _signInManager.SignOutAsync();
 
             if (_signInManager.IsSignedIn(User))
@@ -192,62 +213,62 @@ namespace IdentityWithReact.Controllers
         [HttpPost("find-one")]
         public async Task<IActionResult> Get([FromBody]GetUserVM getUser)
         {
-            if (string.IsNullOrWhiteSpace(getUser.UserId))
+            try
             {
-                _logger.LogError("UserId {getUser.UserId} was blank.", getUser.UserId);
+                if (string.IsNullOrWhiteSpace(getUser.UserId))
+                {
+                    _logger.LogError("UserId {getUser.UserId} was blank.", getUser.UserId);
 
-                ModelState.AddModelError(string.Empty, "Unexpected error: The given ID was blank.");
+                    ModelState.AddModelError(string.Empty, "Unexpected error: The given ID was blank.");
 
-                return BadRequest(ModelState);
-            }
+                    return BadRequest(ModelState);
+                }
 
-            if (string.IsNullOrWhiteSpace(getUser.ActiveId))
-            {
-                _logger.LogError("ActiveId {getUser.ActiveId} was blank.", getUser.ActiveId);
+                if (string.IsNullOrWhiteSpace(getUser.ActiveId))
+                {
+                    _logger.LogError("ActiveId {getUser.ActiveId} was blank.", getUser.ActiveId);
 
-                ModelState.AddModelError(string.Empty, "Unexpected error: The active ID was blank.");
+                    ModelState.AddModelError(string.Empty, "Unexpected error: The active ID was blank.");
 
-                return BadRequest(ModelState);
-            }
+                    return BadRequest(ModelState);
+                }
 
-            var activeUser = await _userManager.FindByIdAsync(getUser.ActiveId);
+                var activeUser = await _userManager.FindByIdAsync(getUser.ActiveId);
 
-            if (activeUser == null)
-            {
-                _logger.LogError($"No user was found with ID {getUser.ActiveId}");
+                if (activeUser == null)
+                {
+                    _logger.LogError($"No user was found with ID {getUser.ActiveId}");
 
-                ModelState.AddModelError(string.Empty, $"Unexpected error: No user was found with ID: {getUser.ActiveId}");
+                    ModelState.AddModelError(string.Empty, $"Unexpected error: No user was found with ID: {getUser.ActiveId}");
 
-                return BadRequest(ModelState);
-            }
+                    return BadRequest(ModelState);
+                }
 
-            //var result = await _userManager.VerifyUserTokenAsync(activeUser, "Default", "authentication-backend", getUser.UserToken);
+                //var result = await _userManager.VerifyUserTokenAsync(activeUser, "Default", "authentication-backend", getUser.UserToken);
 
-            //if (!result)
-            //{
-            //    _logger.LogError("Token {UserToken} was invalid.");
+                //if (!result)
+                //{
+                //    _logger.LogError("Token {UserToken} was invalid.");
 
-            //    ModelState.AddModelError(string.Empty, new IdentityErrorDescriber().InvalidToken().Description);
+                //    ModelState.AddModelError(string.Empty, new IdentityErrorDescriber().InvalidToken().Description);
 
-            //    return BadRequest("The token is outdated.");
-            //}
+                //    return BadRequest("The token is outdated.");
+                //}
 
-            var user = await _userManager.FindByIdAsync(getUser.UserId);
+                var user = await _userManager.FindByIdAsync(getUser.UserId);
 
-            if (user == null)
-            {
-                _logger.LogError($"User was not found: No user found with given id: {getUser.UserId}");
+                if (user == null)
+                {
+                    _logger.LogError($"User was not found: No user found with given id: {getUser.UserId}");
 
-                ModelState.AddModelError(string.Empty, $"Unexpected error occurred: No user with ID {getUser.UserId} was found.");
+                    ModelState.AddModelError(string.Empty, $"Unexpected error occurred: No user with ID {getUser.UserId} was found.");
 
-                return NotFound("Unexpected error occurred: No user was found.");
-            }
+                    return NotFound("Unexpected error occurred: No user was found.");
+                }
 
-            return Ok(
-                new FrontUser
+                var frontUser = new FrontUser
                 {
                     Id = user.Id,
-                    UserName = user.UserName,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Age = user.Age,
@@ -261,7 +282,13 @@ namespace IdentityWithReact.Controllers
                         JwtToken = await _token.JwtTokenGeneration(),
                         Roles = await _userManager.GetRolesAsync(activeUser)
                     }
-                });
+                };
+                return Ok(frontUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("find-all")]
@@ -279,7 +306,6 @@ namespace IdentityWithReact.Controllers
                     users.UserList.Add(new FrontUser
                     {
                         Id = user.Id,
-                        UserName = user.UserName,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         Age = user.Age,

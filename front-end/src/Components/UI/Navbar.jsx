@@ -5,7 +5,13 @@ import { NavLink } from "react-router-dom";
 import * as options from "../actions/actions/identityActions";
 
 const Navbar = props => {
-  const { isAuthenticated, roles, email, onSignOutClick } = props;
+  const {
+    isAuthenticated,
+    roles,
+    email,
+    onSignOutClick,
+    onProfileClick
+  } = props;
   return (
     <React.Fragment>
       <header>
@@ -33,11 +39,6 @@ const Navbar = props => {
             <ul className="navbar-nav ml-auto">
               {isAuthenticated ? (
                 <React.Fragment>
-                  {roles.includes("Administrator") ? (
-                    <NavLink to="/users" className="btn nav-link">
-                      <i className="fa fa-users" /> Users
-                    </NavLink>
-                  ) : null}
                   <NavLink
                     className="nav-link"
                     to="/profile"
@@ -46,6 +47,11 @@ const Navbar = props => {
                     }>
                     <small>Hello {email}!</small>
                   </NavLink>
+                  {roles.includes("Administrator") ? (
+                    <NavLink to="/users" className="btn nav-link">
+                      <i className="fa fa-users" /> Users
+                    </NavLink>
+                  ) : null}
                   <li>
                     <button
                       onClick={() => onSignOutClick()}
